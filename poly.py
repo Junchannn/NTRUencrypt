@@ -1,5 +1,4 @@
 import numpy as np
-from Zmod import Zmod
 from Crypto.Util.number import isPrime
 from sympy import mod_inverse
 
@@ -33,7 +32,7 @@ class Poly:
     
     def add_inplace(self, other):
         if isinstance(other, int) or isinstance(other, np.int64):
-            self.coeffs[0] = (self.coeffs[0] + (other % self.n)) % self.n  # Convert int to ring element
+            self.coeffs[0] = (self.coeffs[0] + (other % self.n)) % self.n 
             return self.trim()
 
         if not self.n == other.n:
@@ -43,7 +42,7 @@ class Poly:
         new_coeffs = np.pad(self.coeffs, (0, max_len - len(self.coeffs)), mode='constant', constant_values=0)
 
         for i in range(len(other.coeffs)):
-            new_coeffs[i] = (new_coeffs[i] + other.coeffs[i]) % self.n  # Modular addition
+            new_coeffs[i] = (new_coeffs[i] + other.coeffs[i]) % self.n  
 
         self.coeffs = np.array(new_coeffs, dtype=np.int64)
         return self.trim()
@@ -73,8 +72,7 @@ class Poly:
         def karatsuba(a, b, N, mod):
             """Recursive Karatsuba polynomial multiplication modulo X^N - 1."""
             max_len = max(len(a), len(b))
-            pow2_len = next_power_of_2(max_len)  # Ensure power-of-2 size
-
+            pow2_len = next_power_of_2(max_len)  
             # Pad polynomials to next power of 2
             a = np.pad(a, (0, pow2_len - len(a)), constant_values=0)
             b = np.pad(b, (0, pow2_len - len(b)), constant_values=0)
@@ -117,7 +115,6 @@ class Poly:
 
             return c[:N] if N != 0 else c
 
-        # Perform multiplication and return result
         return Poly(self.n, karatsuba(self.coeffs, other.coeffs, N, self.n)).trim()
 
 
@@ -148,10 +145,9 @@ class Poly:
 
         if not isPrime(self.n): return None
         k = 0
-        b = Poly(self.n, [1])  # Identity polynomial
-        c = Poly(self.n)  # Empty polynomial
+        b = Poly(self.n, [1])  
+        c = Poly(self.n)  
         
-        # Initialize g = x^N - 1
         a = [0] * (N + 1)
         a[N] = 1  
         a[0] = -1  
