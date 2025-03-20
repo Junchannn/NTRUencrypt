@@ -1,5 +1,4 @@
 from poly import Poly
-from Zmod import Zmod
 from common import *
 import time
 import random
